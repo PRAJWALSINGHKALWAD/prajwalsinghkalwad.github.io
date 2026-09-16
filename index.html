@@ -186,14 +186,14 @@
 
   /* ---------- Approach ---------- */
 
-  .approach p{
+  .approach p, .about p{
     color: var(--text-muted);
     max-width: 62ch;
   }
 
-  .approach p + p{ margin-top: 14px; }
+  .approach p + p, .about p + p{ margin-top: 14px; }
 
-  .approach strong{ color: var(--text); font-weight: 500; }
+  .approach strong, .about strong{ color: var(--text); font-weight: 500; }
 
   /* ---------- Projects ---------- */
 
@@ -348,7 +348,7 @@
     <nav>
       <a href="https://github.com/PRAJWALSINGHKALWAD" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.linkedin.com/in/prajwalsingh-kalwad-507506312" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:prajwalsinghkalwad8@gmail.com">Email</a>
+      <a href="mailto:prajwalsinghkalwad8@gmail.com" class="email-link">Email</a>
       <a href="myresume.pdf" download>Resume</a>
     </nav>
   </div>
@@ -363,6 +363,12 @@
       <span><span class="dot live"></span>2 systems live and in use</span>
       <span><span class="dot proto"></span>1 in active research</span>
     </div>
+  </section>
+
+  <section class="about">
+    <h2>About me</h2>
+    <p>I'm Prajwalsingh Kalwad, currently in my final year of a BCA (Bachelor of Computer Applications). Everything on this page was built outside of coursework — driven by wanting to actually understand how autonomous agents and automation systems work under the hood, not just study the theory of them.</p>
+    <p>I'm open to internships, full-time roles, freelance work, or just talking with people building similar things — whatever gets me closer to working on systems like these for a living.</p>
   </section>
 
   <section class="approach">
@@ -394,7 +400,7 @@
             <p>Built as a feature-first Flutter app talking to a Cloudflare Worker backend, which routes AI requests to Gemini or Groq with automatic fallback if one provider is degraded or rate-limited. GitHub sync is built directly on the Git Data API — blobs, trees, commits, branch refs — rather than a simplified wrapper, which gives precise control over exactly what gets pushed.</p>
             <p>It's in active daily use today. The next milestones are expanding automated test coverage and a dedicated security-hardening pass ahead of any wider release.</p>
             <div class="project-links">
-              <a href="docs/pro-coding-studio.html">Read the full technical writeup</a>
+              <a href="pro-coding-studio">Read the full technical writeup</a>
             </div>
           </div>
         </div>
@@ -422,7 +428,7 @@
             <p>It's live today, answering real questions on a real documentation site. The immediate priority is hardening request validation and rate limiting now that it's public.</p>
             <div class="project-links">
               <a href="https://prajwalsinghkalwad.github.io/Pro-Coding-Studio-Documentation" target="_blank" rel="noopener">See it live</a>
-              <a href="docs/radha.html">Read the full technical writeup</a>
+              <a href="radha">Read the full technical writeup</a>
             </div>
           </div>
         </div>
@@ -449,7 +455,7 @@
             <p>A thin-client / server-brain design: the Android app only observes the accessibility tree and executes actions, while a Python server handles all reasoning through Gemini and LangGraph's plan → execute → verify loop. Keeping reasoning off the device means it isn't structurally tied to Android specifically.</p>
             <p>This is a working prototype, not a released product — the current focus is validating reliable end-to-end task completion before expanding further.</p>
             <div class="project-links">
-              <a href="docs/surya.html">Read the full technical writeup</a>
+              <a href="surya">Read the full technical writeup</a>
             </div>
           </div>
         </div>
@@ -465,7 +471,7 @@
     <div class="contact-row">
       <a href="https://github.com/PRAJWALSINGHKALWAD" target="_blank" rel="noopener">github.com/PRAJWALSINGHKALWAD</a>
       <a href="https://www.linkedin.com/in/prajwalsingh-kalwad-507506312" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:prajwalsinghkalwad8@gmail.com">prajwalsinghkalwad8@gmail.com</a>
+      <a href="mailto:prajwalsinghkalwad8@gmail.com" class="email-link">prajwalsinghkalwad8@gmail.com</a>
       <a href="myresume.pdf" download>Download résumé</a>
     </div>
     <p class="meta">Built the same way as Radha — one file, no framework, no build step.</p>
@@ -473,6 +479,20 @@
 </footer>
 
 <script>
+  document.querySelectorAll('.email-link').forEach(function(link){
+    link.addEventListener('click', function(){
+      var address = 'prajwalsinghkalwad8@gmail.com';
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(address).then(function(){
+          var original = link.textContent;
+          link.textContent = 'Copied — ' + address;
+          setTimeout(function(){ link.textContent = original; }, 1800);
+        }).catch(function(){ /* mailto: still attempted by default */ });
+      }
+      // mailto: navigation still proceeds normally if a mail client is configured
+    });
+  });
+
   document.querySelectorAll('.project-head').forEach(function(btn){
     btn.addEventListener('click', function(){
       var id = btn.getAttribute('data-target');
