@@ -7,7 +7,7 @@ title: Surya
 
 Surya is an intelligent UI automation system that lets users interact with mobile applications using natural language.
 
-Instead of manually navigating through an application or defining every automation step beforehand, a user describes what they want to accomplish. Surya observes the current interface, reasons about what to do next through an LLM, executes an action, and checks the result before continuing.
+Instead of manually navigating through an application or defining every automation step beforehand, a user describes what they want to accomplish. Surya observes the current interface, reasons abo[...]
 
 The current prototype targets Android, with the client/server split designed so the reasoning layer isn't tied to any one platform.
 
@@ -19,6 +19,8 @@ The current prototype targets Android, with the client/server split designed so 
 **Agent orchestration:** LangGraph (plan → execute → verify loop)
 **Persistence:** SQLite (agent checkpoint/recovery state)
 
+**Download:** [Surya APK](https://github.com/PRAJWALSINGHKALWAD/prajwalsinghkalwad.github.io/releases/download/v1/surya.apk)
+
 ---
 
 ## The idea behind Surya
@@ -27,9 +29,9 @@ The idea started with a simple question:
 
 > What if you could tell an application what you want, instead of telling it exactly how to do it?
 
-Traditional automation depends on predefined workflows — a fixed sequence like `Open → Click → Type → Scroll → Click`. This works when the interface and workflow are predictable, but real applications aren't always like that: screens change, elements move, and the right next step often isn't knowable until the previous one finishes.
+Traditional automation depends on predefined workflows — a fixed sequence like `Open → Click → Type → Scroll → Click`. This works when the interface and workflow are predictable, but rea[...]
 
-Surya takes a different approach. Rather than defining the entire workflow upfront, the agent observes the current state, decides the next action, performs it, and observes the new state — so the workflow is built dynamically during execution rather than scripted in advance.
+Surya takes a different approach. Rather than defining the entire workflow upfront, the agent observes the current state, decides the next action, performs it, and observes the new state — so th[...]
 
 ### Agent loop
 
@@ -49,7 +51,7 @@ The loop is intentionally bounded — it runs for a fixed maximum number of step
 
 ## Understanding the interface
 
-Surya primarily uses the Android accessibility tree to understand the current UI. The raw accessibility data can contain a lot of information, much of which isn't useful for the agent, so it's parsed into a flattened, focused representation before reaching the reasoning layer — things like element type, visible text, and whether an element is clickable, editable, or scrollable.
+Surya primarily uses the Android accessibility tree to understand the current UI. The raw accessibility data can contain a lot of information, much of which isn't useful for the agent, so it's par[...]
 
 This gives the reasoning layer a cleaner picture of the interface than raw accessibility data would.
 
@@ -65,7 +67,7 @@ The goal isn't simply to give the LLM more information — it's to give it *usef
 
 ### When accessibility information isn't enough
 
-Accessibility data doesn't describe every visual interface completely — games, canvas-based UIs, and other visually complex screens can contain information the accessibility tree doesn't capture well. Surya can capture a screenshot for these situations. Feeding that captured screenshot directly into the model's visual reasoning is an active area of work rather than a fully wired capability today.
+Accessibility data doesn't describe every visual interface completely — games, canvas-based UIs, and other visually complex screens can contain information the accessibility tree doesn't capture[...]
 
 > Use structured information when it's enough. Use visual information when it's needed.
 
@@ -73,9 +75,9 @@ Accessibility data doesn't describe every visual interface completely — games,
 
 ## The agent
 
-Surya uses a thin-client / server-brain split: the Android app handles observation and action execution, while the Python server handles orchestration and LLM reasoning. This keeps the reasoning logic independent of any single device or platform.
+Surya uses a thin-client / server-brain split: the Android app handles observation and action execution, while the Python server handles orchestration and LLM reasoning. This keeps the reasoning l[...]
 
-The agent doesn't assume an action succeeded — after executing a step, it re-observes the interface and uses that new state as the basis for its next decision. This feedback loop is what lets Surya adapt mid-task rather than blindly following a fixed script.
+The agent doesn't assume an action succeeded — after executing a step, it re-observes the interface and uses that new state as the basis for its next decision. This feedback loop is what lets Su[...]
 
 ### Completing a task
 
@@ -83,15 +85,15 @@ A single request can involve many individual interactions. For example:
 
 > "Open the browser, search for Python documentation, find the PDF, and download it."
 
-Surya may need to navigate to the browser, find the search interface, enter the query, inspect results, identify the right document, open it, start the download, and confirm the outcome — without the user specifying each of those steps in advance.
+Surya may need to navigate to the browser, find the search interface, enter the query, inspect results, identify the right document, open it, start the download, and confirm the outcome — withou[...]
 
 ### When Surya gets stuck
 
-An autonomous system shouldn't keep acting indefinitely when it's uncertain. Surya stops and surfaces the situation when it hits its step limit, encounters a failure, or reaches a state it can't confidently act on — rather than continuing to act on a guess.
+An autonomous system shouldn't keep acting indefinitely when it's uncertain. Surya stops and surfaces the situation when it hits its step limit, encounters a failure, or reaches a state it can't c[...]
 
 ### Human-in-the-loop interaction
 
-Surya can involve the user directly when it needs more context. The current mechanism is a structured choice: the agent presents a short prompt with a small set of options as an on-screen overlay (for example, confirming an action before proceeding), and the user's tap is sent back as the answer.
+Surya can involve the user directly when it needs more context. The current mechanism is a structured choice: the agent presents a short prompt with a small set of options as an on-screen overlay [...]
 
 Open-ended, free-text clarification — the agent asking a genuinely open question and parsing a typed or spoken answer — is on the roadmap but not yet how the current build handles it.
 
@@ -140,7 +142,7 @@ flowchart TD
     APP -->|Result + Updated UI State| SERVER
 ```
 
-The Android app stays deliberately thin: it captures the accessibility tree, executes declarative commands (`click`, `swipe`, `open_app`, etc.), and reports results — it doesn't make decisions itself. All reasoning happens server-side, communicated over a WebSocket connection as JSON messages.
+The Android app stays deliberately thin: it captures the accessibility tree, executes declarative commands (`click`, `swipe`, `open_app`, etc.), and reports results — it doesn't make decisions [...]
 
 ### Technology stack
 
@@ -158,13 +160,13 @@ The Android app stays deliberately thin: it captures the accessibility tree, exe
 
 ### Task persistence
 
-The current persistence layer stores LangGraph checkpoint state per device — this lets an in-progress agent task recover its place if interrupted, but it isn't yet a general memory system. It doesn't currently retain user preferences or recurring behavior across sessions; that's a planned direction rather than a current capability.
+The current persistence layer stores LangGraph checkpoint state per device — this lets an in-progress agent task recover its place if interrupted, but it isn't yet a general memory system. It d[...]
 
 ---
 
 ## Where the project is today
 
-Surya is a working prototype. The core loop — natural-language goal → UI understanding → reasoning → action → feedback → next action — is implemented and runs end to end on a device.
+Surya is a working prototype. The core loop — natural-language goal → UI understanding → reasoning → action → feedback → next action — is implemented and runs end to end on a device[...]
 
 What's proven:
 
@@ -187,9 +189,9 @@ The current goal is to validate and harden this architecture, not to present Sur
 
 **Security** — The prototype doesn't yet have the authentication, encryption, and action-safety controls a production release would need. Hardening this is a priority before any wider testing.
 
-**Speed** — Because the system repeatedly observes the UI and reasons about the next step, execution is slower than deterministic, pre-scripted automation. Reducing this latency is ongoing work.
+**Speed** — Because the system repeatedly observes the UI and reasons about the next step, execution is slower than deterministic, pre-scripted automation. Reducing this latency is ongoing work[...]
 
-**Reliability** — LLM-based reasoning introduces uncertainty, and end-to-end task success hasn't yet been validated across a broad set of real apps. The design intentionally prioritizes stopping over continuing on a low-confidence guess.
+**Reliability** — LLM-based reasoning introduces uncertainty, and end-to-end task success hasn't yet been validated across a broad set of real apps. The design intentionally prioritizes stoppin[...]
 
 **Platform support** — Currently Android only. The client/server split was chosen specifically so this isn't a structural blocker to expanding later.
 
@@ -215,6 +217,12 @@ The current goal is to validate and harden this architecture, not to present Sur
 
 ---
 
+## Related Projects
+
+**Pro Coding Studio** — [Available on Google Play Store](https://play.google.com/store/apps/details?id=com.pmk.pro_coding_studio&pcampaignid=web_share)
+
+---
+
 ## Design principles
 
 - **Observe before acting** — Understand the current state before deciding what to do.
@@ -229,15 +237,15 @@ The current goal is to validate and harden this architecture, not to present Sur
 
 ## How I built it
 
-I designed the overall architecture, interaction model, agent workflow, and technical direction of Surya — the thin-client/server split, the accessibility-tree processing pipeline, the LangGraph plan/execute/verify loop, and the declarative action protocol between client and server.
+I designed the overall architecture, interaction model, agent workflow, and technical direction of Surya — the thin-client/server split, the accessibility-tree processing pipeline, the LangGrap[...]
 
-AI coding agents were used extensively during implementation. The system-level design decisions — architecture, workflow, feature direction, integration, and overall development process — remained my responsibility throughout. This project has also been an exploration of AI-assisted software engineering: using coding agents as implementation tools while keeping architectural and engineering judgment human-directed.
+AI coding agents were used extensively during implementation. The system-level design decisions — architecture, workflow, feature direction, integration, and overall development process — rem[...]
 
 ---
 
 ## Project status
 
-Surya is a working prototype with a functioning core loop on real Android devices. The next stage is turning that prototype into something **reliable, tested, secure, and cross-platform** — in that order of priority.
+Surya is a working prototype with a functioning core loop on real Android devices. The next stage is turning that prototype into something **reliable, tested, secure, and cross-platform** — in [...]
 
 ---
 
