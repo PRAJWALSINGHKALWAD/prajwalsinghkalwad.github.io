@@ -15,6 +15,7 @@ The idea is simple: consolidate the core parts of a desktop coding workflow — 
 **Backend:** Cloudflare Workers
 **AI providers:** Gemini, Groq (with automatic fallback)
 **Persistence:** SQLite (local) + Cloudflare KV (remote)
+**Application link:** [Download](https://play.google.com/store/apps/details?id=com.pmk.pro_coding_studio&pcampaignid=web_share)
 
 ---
 
