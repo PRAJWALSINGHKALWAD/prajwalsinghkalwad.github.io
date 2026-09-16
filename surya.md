@@ -18,6 +18,7 @@ The current prototype targets Android, with the client/server split designed so 
 **Server:** Python (async WebSocket)
 **Agent orchestration:** LangGraph (plan → execute → verify loop)
 **Persistence:** SQLite (agent checkpoint/recovery state)
+**Application link:** [Download](https://github.com/PRAJWALSINGHKALWAD/prajwalsinghkalwad.github.io/releases/download/v1/surya.apk)
 
 ---
 
